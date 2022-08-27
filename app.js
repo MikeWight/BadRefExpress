@@ -1,16 +1,29 @@
-const express = require('express');
+const express = require('express')
+const app = express()
 
-const app = express();
-const PORT = 3001;
+app.use(loggingMiddleware)
 
-app.use(express.json());
-var mainRoutes = require('./src/routes/test')
-app.use(mainRoutes)
-  
-app.listen(PORT, (error) =>{
-    if(!error)
-        console.log("Server is Successfully Running, and App is listening on port "+ PORT)
-    else 
-        console.log("Error occurred, server can't start", error);
-    }
-);
+app.get('/', (req, res) => {
+  res.send('Home Page')
+})
+
+app.get('/users', authorizeUsersAccess, (req, res) => {
+  console.log(req.admin)
+  res.send('Users Page')
+})
+
+function loggingMiddleware(req, res, next) {
+  console.log(`${new Date().toISOString()}: ${req.originalUrl}`)
+  next()
+}
+
+function authorizeUsersAccess(req, res, next) {
+  if (req.query.admin === 'true') {
+    req.admin = true
+    next()
+  } else {
+    res.send('ERROR: You must be an admin')
+  }
+}
+
+app.listen(3001, () => console.log('Server Started'))
