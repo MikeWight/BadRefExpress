@@ -1,10 +1,12 @@
 const express = require('express')
-const users = require('./users')
+const cors = require('cors')
+const user = require('./users')
 const app = express()
 
+app.use(cors())
 
 app.get('/', (req, res) => {
-  res.json(users);
+  res.json(user);
 })
 
 app.get('/users', (req, res) => {

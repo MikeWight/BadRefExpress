@@ -1,4 +1,4 @@
-exports.users = {
+exports.user = {
   id: 1,
   name: "Leanne Graham",
   username: "Bret",
